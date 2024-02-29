@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController:ControllerBase
+ 
+
+    [Authorize]
+    public class UsersController:BaseApiController
     {
         
         private readonly IUserInterface _userInterface;
@@ -18,7 +20,7 @@ namespace API.Controllers
             _userInterface=userInterface;
         }
 
-
+       [AllowAnonymous]
        [HttpGet]
        public async Task<IActionResult> GetAllUsers()
        {
