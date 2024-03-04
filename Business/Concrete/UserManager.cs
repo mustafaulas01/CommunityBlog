@@ -16,11 +16,14 @@ namespace Business.Concrete
     {
         private readonly AstralContext _context;
 
+        private readonly ITokenService _tokenService;
+
       
 
-        public UserManager(AstralContext context)
+        public UserManager(AstralContext context,ITokenService tokenService)
         {
             _context=context;
+            _tokenService=tokenService;
           
         }
         public async Task<List<AppUser>> GetAllUsersAsync()
@@ -60,7 +63,7 @@ namespace Business.Concrete
             return true;
         }
 
-        public async Task<AppUserDto> RegisterUser(AppUserRegisterDto userRegisterDto)
+        public async Task<LoginTokenDto> RegisterUser(AppUserRegisterDto userRegisterDto)
         {
 
               bool isUserExist=await UserExists(userRegisterDto.UserName);
@@ -80,11 +83,13 @@ namespace Business.Concrete
 
                 _context.AppUsers.Add(user);
                 await _context.SaveChangesAsync();
-               return new AppUserDto() {Id=user.Id,UserName=user.UserName};
+                 
+               var token= _tokenService.CreateToken(new AppUserLoginDto(){UserName=userRegisterDto.UserName,Password=userRegisterDto.Password});
+               return new LoginTokenDto() {UserName=user.UserName,Token=token};
             } 
             else
             {
-             return new AppUserDto() {Id=0,UserName="Empty"};
+             return new LoginTokenDto(){UserName="",Token=""};
             }
 
 

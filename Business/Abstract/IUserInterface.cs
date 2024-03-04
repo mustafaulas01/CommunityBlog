@@ -14,7 +14,7 @@ namespace Business.Abstract
         Task<AppUser>GetUserAsync(int id);
         Task<AppUser>GetUserByNameAsync(string userName);
 
-        Task<AppUserDto>RegisterUser(AppUserRegisterDto userRegisterDto);
+        Task<LoginTokenDto>RegisterUser(AppUserRegisterDto userRegisterDto);
 
         Task<bool> UserExists(string userName);
 
