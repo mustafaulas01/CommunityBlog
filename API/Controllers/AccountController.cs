@@ -21,14 +21,14 @@ namespace API.Controllers
 
 
         [HttpPost("register")]//POST: api/account/register
-        public async Task<ActionResult<AppUserDto>> Register([FromBody] AppUserRegisterDto userRegisterDto)
+        public async Task<ActionResult<LoginTokenDto>> Register([FromBody] AppUserRegisterDto userRegisterDto)
         {
             if (string.IsNullOrEmpty(userRegisterDto.UserName) || string.IsNullOrEmpty(userRegisterDto.Password))
                return BadRequest("Username and Password can not empty");
 
             var added_user = await _userInterface.RegisterUser(userRegisterDto);
 
-            if(added_user.Id!=0)
+            if(!string.IsNullOrEmpty(added_user.UserName))
             return Ok(added_user);
             else 
             return BadRequest("Username is taken");
